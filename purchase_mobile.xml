@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mobile_purchase_wizard" model="ir.ui.view">
+            <field name="name">mobile.purchase.wizard</field>
+            <field name="model">purchase.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Mobile Business">
+                        <group>
+                            <field name="from_date"/>
+                            <field name="to_date"/>
+                        </group>
+                    <footer>
+                        <button name="Quotation_purchase" string="Quotation" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="purchase_mobile_wizard" model="ir.actions.act_window">
+            <field name="name">Purchase Mobile</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="mobile_purchase_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+<!--Second wizard        -->
+        <record id="purchase_customer_wizard" model="ir.ui.view">
+            <field name="name">purchase.customer.wizard</field>
+            <field name="model">purchase.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Customer">
+                        <group>
+                            <field name="cus_name"/>
+                        </group>
+                    <footer>
+                        <button name="cus_purchase" string="Customer" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="mcustomer_purchase_wizard" model="ir.actions.act_window">
+            <field name="name">Purchase Customer</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="purchase_customer_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+
+    </data>
+</odoo>

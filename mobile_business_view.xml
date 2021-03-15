@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mobile_business_tree" model="ir.ui.view">
+            <field name="name">mobile.business.tree</field>
+            <field name="model">mobile.business.store</field>
+            <field name="arch" type="xml">
+                <tree string="Mobile Business">
+                    <field name="mobile_name"/>
+                    <field name="mob_unit_price"/>
+                    <field name="mob_qty"/>
+                </tree>
+            </field>
+        </record>
+        <record id="mobile_business_form" model="ir.ui.view">
+            <field name="name">mobile.business.form</field>
+            <field name="model">mobile.business.store</field>
+            <field name="arch" type="xml">
+                <form string="Mobile Business">
+                    <sheet>
+                        <group>
+                            <field name="mobile_image" widget="image" class="oe_avatar"/>
+                            <field name="mobile_name"/>
+                            <field name="mob_unit_price"/>
+                            <field name="mob_qty"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="mobile_purchase_tree" model="ir.ui.view">
+            <field name="name">mobile.purchase.tree.view</field>
+            <field name="model">mobile.purchase</field>
+            <field name="arch" type="xml">
+                <tree string="Mobile Purchase">
+                    <field name="mob_pur_sq"/>
+                    <field name="customer_id"/>
+                    <field name="purchase_line"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="mobile_purchase_form" model="ir.ui.view">
+            <field name="name">mobile.purchase.form</field>
+            <field name="model">mobile.purchase</field>
+            <field name="arch" type="xml">
+                <form string="Mobile Purchase">
+                    <header>
+                        <button name="%(mobile_business.purchase_mobile_wizard)d" string="Quotation" type="action" class="oe_highlight"/>
+                        <button name="%(mobile_business.mcustomer_purchase_wizard)d" string="Customer" type="action" class="oe_highlight"/>
+                        <button name="action_processing" type="object" string="Process" states="draft" class="oe_highlight"/>
+                        <button name="action_complete" type="object" string="Compeleted" states="processing" class="oe_highlight"/>
+                        <button name="action_cancel" type="object" string="Cancel" states="completed,processing" class="oe_highlight"/>
+                        <button name="action_reset" type="object" string="Reset" states="cancel" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,processing,completed"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="mob_pur_sq"/>
+                            <field name="customer_id"/>
+                            <field name="currency_id"/>
+                        </group>
+                        <group>
+                            <label for="street" string="Address"/>
+                                <div class="o_address_format">
+                                    <field name="street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State"/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <field name="country_id" placeholder="Country" class="o_address_country" />
+                            </div>
+                            </group>
+                        <group>
+                        <notebook>
+                            <page string="Mobile List">
+                                <group>
+                                 <div class="oe_inline">
+                                <field name="purchase_line" widget="one2many_list" nolabel="1">
+                                    <tree name="purchase_mobile_line" string="Mobile Purchase" editable="bottom">
+                                        <field name="mobile_name_line"/>
+                                        <field name="mobile_price"/>
+                                        <field name="gst_tax"/>
+                                        <field name="mobile_qty"/>
+                                    </tree>
+                                </field>
+                                 </div>
+                                </group>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="subtotal_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                    <field name="total_amount" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+<!--        <record id="purchase_search_view" model="ir.ui.view">-->
+<!--            <field name="name">mobile.search.view</field>-->
+<!--            <field name="model">mobile.purchase</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <search string="search view">-->
+<!--                    <filter name="state" string="Completed" domain="[('state','=','completed')]" />-->
+<!--                </search>-->
+<!--            </field>-->
+<!--        </record>-->
+
+
+        <record model="ir.actions.act_window" id="mobile_action">
+            <field name="name">Mobile business</field>
+            <field name="res_model">mobile.business.store</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="purchase_action">
+            <field name="name">Purchase View</field>
+            <field name="res_model">mobile.purchase</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+<!--            <field name="context">{"search_default_state":1}</field>-->
+            <field name="domain">[('state','=','completed')]</field>
+
+
+        </record>
+
+        <record id="purchase_seq_number" model="ir.sequence">
+           <field name="name">purchase sequencer</field>
+           <field name="code">mobile.purchase</field>
+           <field name="prefix">POM/</field>
+           <field name="padding">3</field>
+            <field name="number_increment">1</field>
+         </record>
+
+<menuitem id="mobile_view_id" name="Mobile store"/>
+<menuitem id="mobile_store" name="Mobile Store" parent="mobile_view_id" action="mobile_action"/>
+<menuitem id="purchase_mobile" name="Purchase" parent="mobile_view_id" action="purchase_action"/>
+
+        <record id="partner_form_inherited" model="ir.ui.view">
+            <field name="name">Partner Form Inherited</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/notebook/page[3]/group/group[1]/field[@name='customer']" position="after">
+                    <field name="github"/>
+                </xpath>
+<!--                   <field name="email" position="after">-->
+<!--                    <field name="github"></field>-->
+<!--                </field>-->
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>
